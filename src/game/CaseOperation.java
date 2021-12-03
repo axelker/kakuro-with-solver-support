@@ -1,13 +1,14 @@
 package game;
 
-public class CaseOperation {
+public class CaseOperation extends Case {
 
     private int valueLigne;
     private int valueColonne;
 
-    public CaseOperation(int x,int y){
-        this.valueLigne=x;
-        this.valueColonne=y;
+    public CaseOperation(int x,int y,int ligneval,int colval){
+        super(x,y);
+        this.valueLigne=ligneval;
+        this.valueColonne=colval;
     }
 
     public int getValueLigne(){
@@ -16,7 +17,7 @@ public class CaseOperation {
     public int getValueColonne(){
         return this.valueColonne;
     }
-    /*//Redefinition du equals par rapport au valeur de la case
+    //Redefinition du equals par rapport au valeur de la case
     @Override
     public boolean equals(Object c) 
     {
@@ -28,7 +29,7 @@ public class CaseOperation {
         else if(c instanceof CaseOperation)
             {
                 CaseOperation tmp = (CaseOperation)c;
-                if(tmp.getName().equals(this.getName()))
+                if(tmp.getValueLigne()==this.getValueLigne() && tmp.getValueColonne()==this.getValueColonne() && tmp.getCoordonne().equals(this.getCoordonne()))
                 {
                     return true;
                 }
@@ -37,18 +38,14 @@ public class CaseOperation {
         return false;
     }
     
+    //Hashcode toString pour manipuler Hashmap
     @Override
     public int hashCode()
     {
-        return this.nom.hashCode();
-    }*/
-    
-    public String convert0(int value){
-        if(value==0){
-            return " ";
-        }
-        return ""+value;
+        String res=this.toString()+" "+getValueLigne()+" "+getValueColonne()+" "+getx()+" "+gety();
+        return res.hashCode();
     }
+    
     @Override 
     public String toString(){
         return convert0(this.valueLigne)+"/"+convert0(this.valueColonne);

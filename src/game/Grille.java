@@ -1,15 +1,23 @@
 package game;
+import java.util.*;
 import observer.*;
 
 public class Grille extends AbstractModelEcoutable {
  
     private String[][] grilleToString;
+    private Map<Coordonne,CaseBlanche>MapCaseBlanche = new HashMap<Coordonne,CaseBlanche>();
+    private List<CaseNoire>listeCaseNoire = new ArrayList<CaseNoire>();
+    private List<CaseOperation>listeCaseOperation = new ArrayList<CaseOperation>();
+    //Colonne ligne grille
     private int nbLigne;
     private int nbColonne;
+
     public Grille(){
         this.grilleToString=new RecupeGrille().RecupGrilleFacile();
         this.nbLigne=grilleToString.length;
         this.nbColonne=grilleToString[0].length;
+        ConstruitGrilleCase();
+        MiseAjourGrille();
 
     }
 
@@ -21,6 +29,58 @@ public class Grille extends AbstractModelEcoutable {
     }
     public String getElement(int i,int j){
         return this.grilleToString[i][j];
+    }
+    public CaseBlanche getCaseGrille(int i,int j){
+        return this.MapCaseBlanche.get(new Coordonne(i,j));
+    }
+    public void setCaseGrille(CaseBlanche c,int i,int j){
+        this.MapCaseBlanche.put(new Coordonne(i,j),c);
+        MiseAjourGrille();
+    }
+
+    public void ConstruitGrilleCase(){
+        for(int i=0;i<this.nbLigne;i++)
+        {
+            
+            for(int j=0;j<this.nbColonne;j++)
+            {
+                if(grilleToString[i][j].equals("v") || grilleToString[i][j].equals("0"))
+                {
+                    MapCaseBlanche.put(new Coordonne(i,j),new CaseBlanche(i,j));
+                }
+                if(grilleToString[i][j].contains("/")){
+
+                    String res =grilleToString[i][j];
+                    final String separateur="/";
+                    String motDecoupe[]=res.split(separateur);
+                    int valueLigne= Integer.parseInt(motDecoupe[0]);
+                    int valueColonne= Integer.parseInt(motDecoupe[1]);
+
+                    listeCaseOperation.add(new CaseOperation(i,j,valueLigne,valueColonne));
+                    
+                }
+                if(grilleToString[i][j].equals("!")){
+                    listeCaseNoire.add(new CaseNoire(i,j));
+                }
+
+            }
+        }
+    }
+
+    public void MiseAjourGrille(){
+        for(Coordonne c : MapCaseBlanche.keySet()){
+            CaseBlanche b = MapCaseBlanche.get(c);
+            grilleToString[b.getx()][b.gety()]=b.toString();
+
+        }
+        for(CaseNoire n : listeCaseNoire){
+            grilleToString[n.getx()][n.gety()]=n.toString();
+            
+        }
+        for(CaseOperation o : listeCaseOperation){
+            grilleToString[o.getx()][o.gety()]=o.toString();
+            
+        }
     }
 
     @Override
