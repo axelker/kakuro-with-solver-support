@@ -15,6 +15,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
     private VueAideUtilisateur cpAide;
     private final ArrayList<String> domaine = getDomaineString();
     private Map<JButton,CaseBlanche>MapCaseBlanche = new HashMap<JButton,CaseBlanche>();
+
     public VueGraphique(Grille g)
     {
         this.grille=g;
@@ -43,19 +44,17 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
             for(int j=0;j<this.grille.getNbColonne();j++){
                 JLabel lab = new JLabel();
 
-                //Cas ou c'est une case opération
+                //Cas ou c'est une case opération construire un label
                 if(grille.getElement(i,j).contains("/")){
-                lab=new JLabel(grille.getElement(i,j));
-                lab.setForeground(Color.white);
-                lab.setBackground(Color.black);
-                lab.setBorder(BorderFactory.createLineBorder(Color.white, 1));        
-                lab.setOpaque(true);
-                cp.add(lab);
-            }
+                    lab=new JLabel(grille.getElement(i,j));
+                    lab.setForeground(Color.white);
+                    lab.setBackground(Color.black);
+                    lab.setBorder(BorderFactory.createLineBorder(Color.white, 1));        
+                    lab.setOpaque(true);
+                    cp.add(lab);
+                }
 
-                //RAJOUTER CONDITION SI L"ELEMENT EST UN CHIFFRE CONTENU DANS LISTE
-                //ENTRE 1 ET 9
-                
+                //Cas ou c'est une case  blanche contruire un bouton cliquable et ajouter celui-ci en tant que clé pour la case en question à la map 
                 if(grille.getElement(i,j).equals(" ") || this.domaine.contains(grille.getElement(i,j))){
                     JButton b = new JButton(grille.getElement(i,j));
                     b.setBackground(Color.white);
@@ -65,6 +64,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
                     cp.add(b);
                     
                 }
+                //Cas ou c'est une case noire construire un label
                 if(grille.getElement(i,j).equals("!")){
                     lab=new JLabel();
                     lab.setForeground(Color.white);
@@ -78,6 +78,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
             }
         }
     }
+
     public void AjoutPanel(){
         this.add(cp);
         this.add(cpAide);
@@ -92,8 +93,9 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
     public void actionPerformed(ActionEvent e)
     {
         
-            //Prends la valeur texte du bouton pour tester si plusieurs bouton le quelle a été selectionné
-            JButton Bsrc= (JButton) e.getSource();  
+            //Recuperer le boutoncliqué
+            JButton Bsrc= (JButton) e.getSource(); 
+            //Si la map des cases blanche n'est pas vide sortir la case correspondant au bouton cliqué 
             if(!MapCaseBlanche.isEmpty()){
                 if(MapCaseBlanche.containsKey(Bsrc)){
                     //System.out.println(MapCaseBlanche.get(Bsrc).getx()+" "+MapCaseBlanche.get(Bsrc).gety());
@@ -102,7 +104,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
                     cpAide.removeAll();
                     Dessin();
                     cpAide.DessinBouttonValDomaine();
-                    AjoutPanel();
+                    //AjoutPanel();
                     updateUI();
                 }
             }

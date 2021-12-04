@@ -3,8 +3,10 @@ import java.util.*;
 import observer.*;
 
 public class Grille extends AbstractModelEcoutable {
- 
+    
+    //Permet de stocker la grille sous forme de string 
     private String[][] grilleToString;
+    //Stock les cases
     private Map<Coordonne,CaseBlanche>MapCaseBlanche = new HashMap<Coordonne,CaseBlanche>();
     private List<CaseNoire>listeCaseNoire = new ArrayList<CaseNoire>();
     private List<CaseOperation>listeCaseOperation = new ArrayList<CaseOperation>();
@@ -13,10 +15,14 @@ public class Grille extends AbstractModelEcoutable {
     private int nbColonne;
 
     public Grille(){
+        //Recupe une grille facile sous forme de string
         this.grilleToString=new RecupeGrille().RecupGrilleFacile();
+        //Longeur des lignes et colonne du tableau à deux dimensions
         this.nbLigne=grilleToString.length;
         this.nbColonne=grilleToString[0].length;
+        //Construit les différentes map de cases 
         ConstruitGrilleCase();
+        //Met a jour le tableau de String
         MiseAjourGrille();
 
     }
@@ -36,6 +42,7 @@ public class Grille extends AbstractModelEcoutable {
     public void setCaseGrille(CaseBlanche c,int i,int j){
         this.MapCaseBlanche.put(new Coordonne(i,j),c);
         MiseAjourGrille();
+        fireChangement();
     }
 
     public void ConstruitGrilleCase(){
