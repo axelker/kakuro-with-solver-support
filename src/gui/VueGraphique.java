@@ -1,6 +1,8 @@
 package gui;
 import game.*;
 import observer.*;
+import src.Constante;
+
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +15,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
     private Grille grille;
     private JPanel cp = new JPanel();
     private VueAideUtilisateur cpAide;
-    private final ArrayList<String> domaine = getDomaineString();
+    private final ArrayList<String> domaine = Constante.domaineToString;
     private Map<JButton,CaseBlanche>MapCaseBlanche = new HashMap<JButton,CaseBlanche>();
 
     public VueGraphique(Grille g)
@@ -28,15 +30,6 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
         Dessin();
     }
 
-    public ArrayList<String> getDomaineString(){
-        ArrayList<String>d = new ArrayList<String>();
-        for(int i=1;i<10;i++)
-        {
-            d.add(""+i);
-        }
-        return d;
-        
-       }
     public void Dessin(){
         cp.removeAll();
 
@@ -83,11 +76,11 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
         this.add(cp);
         this.add(cpAide);
     }
+   
     @Override
     public void modeleMisAjour(Object source)
     {
         this.Dessin();
-        System.out.println(grille.toString());
     }
     @Override
     public void actionPerformed(ActionEvent e)
@@ -97,12 +90,14 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
             JButton Bsrc= (JButton) e.getSource(); 
             //Si la map des cases blanche n'est pas vide sortir la case correspondant au bouton cliqué 
             if(!MapCaseBlanche.isEmpty()){
-                if(MapCaseBlanche.containsKey(Bsrc)){
+                if(MapCaseBlanche.containsKey(Bsrc) && !grille.finish()){
                     //System.out.println(MapCaseBlanche.get(Bsrc).getx()+" "+MapCaseBlanche.get(Bsrc).gety());
                     CaseBlanche c = MapCaseBlanche.get(Bsrc);
+                    //Case à modifier 
                     cpAide.setCaseModif(c);
                     cpAide.removeAll();
                     Dessin();
+                    //Dessin le pannel de bouton avec les valeur du domaine de la case c
                     cpAide.DessinBouttonValDomaine();
                     //AjoutPanel();
                     updateUI();

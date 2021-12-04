@@ -19,7 +19,7 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     private CaseBlanche caseModif=null;
     //Vue graphique de la grille kakuro
     private VueGraphique vuegraphique;
-
+    //Titre pour aide
     private JLabel titre=new JLabel("Cliquer sur une case pour afficher les valeurs de son domaine");
 
     public VueAideUtilisateur(Grille g,VueGraphique vuegraphique){
@@ -45,21 +45,39 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         if(domaine.isEmpty()){
             return;
         }
-        titre.setText("Cliquer sur la valeur de votre choix");
+        //Modif titre 
+        if(!this.caseModif.equals(null)){
+            titre.setText("Cliquer sur une valeur pour modifier la case blanche de coordonnée (" + this.caseModif.getx()+","+this.caseModif.gety()+")");
+        }
+        else {
+            titre.setText("Cliquer sur la valeur de votre choix");
+
+        }
         this.add(titre);
+        //Ajout des boutons au jpanel
         JPanel boutonDomaine = new JPanel();
         boutonDomaine.setLayout(new GridLayout(3,3));
+        
         //SINON CRÉER LES VALEURS DE DOMAINE SOUS FORME DE BOUTON CLIQUABLE
         for(int val : domaine){
             JButton b = new JButton(val+"");
             b.setBackground(Color.lightGray);
-            b.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+            b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
             b.addActionListener(this);
             boutonDomaine.add(b);
             
         }
         this.add(boutonDomaine);
 
+    }
+
+    public void Partietermine(){
+        if(grille.finish()){
+            this.removeAll();
+            titre.setText("Partie Terminée bravo !");
+            this.add(titre);
+
+        }
     }
     //Modifie la case blanche étant cliqué
     public void setCaseModif(CaseBlanche b){
@@ -72,6 +90,7 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     {
         this.removeAll();
         this.DessinBouttonValDomaine();
+        this.Partietermine();
         vuegraphique.removeAll();
         vuegraphique.Dessin();
         vuegraphique.AjoutPanel();
@@ -87,8 +106,8 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
             String BoutonPresse= Bsrc.getText();  
             //Recuperer la valeur du bouton étant une valeur de domaine
             int valDomaine=Integer.parseInt(BoutonPresse);   
-            //La case modifier a été initialiser
-            if(!caseModif.equals(null)){
+            //SI La case à modifier a été initialiser et la partie n'est pas finis on change la valeur de la case par celle cliqué
+            if(!caseModif.equals(null) && !grille.finish()){
                 //Appliquer la modification de la valeur de cette case
                 caseModif.setValue(valDomaine);
                 grille.setCaseGrille(caseModif, caseModif.getx(),caseModif.gety());     

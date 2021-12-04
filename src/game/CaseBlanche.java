@@ -55,7 +55,7 @@ public class CaseBlanche extends Case {
     @Override
     public int hashCode()
     {
-        String res=this.toString()+" "+getValue()+" "+getx()+" "+gety();
+        String res=this.toString()+" "+getx()+" "+gety();
         return res.hashCode();
     }
 

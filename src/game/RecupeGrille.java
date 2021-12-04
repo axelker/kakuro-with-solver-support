@@ -2,16 +2,21 @@ package game;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
+import src.Constante;
 
 /**
  * Classe permettant le tirage aleatoire et la conversion d'une grille kakuro contenu dans un fichier texte
  * au sein d'un tableau en java.
  */
 public class RecupeGrille {
-    //Constante grille facile
-    private final int TailleLigneFacile=9;
-    private final int TailleColonneFacile=9;
 
+    //Random permettant tirage aleatoire d'une grille pour une grille
+    private Random r = new Random();
+    private int aleaFacile;
+
+    public RecupeGrille(){
+        this.aleaFacile=r.nextInt(Constante.nbGrilleFacile);
+    }
     /**
      * Récupère un fichier contenant une grille de kakuro 
      * puis la convertis en un tableau à deux dimension représentant cette grille.
@@ -49,15 +54,19 @@ public class RecupeGrille {
         return tab;
 
     }
-    /** Permet 
+    /** Permet de tirer aléatoirement une grille de kakuro parmis celle disponible
      * @return retourne un tableau représentant une grille de kakuro de dificultée facile
      */
     public String[][] RecupGrilleFacile(){
-        /*Random r = new Random();
-        int numGrille=r.nextInt(3);
-        return ConvertGrille("grille/facile/grille"+numGrille+".txt", TailleLigneFacile, TailleColonneFacile);
-        */
-        return ConvertGrille("grille/facile/grille0.txt", TailleLigneFacile, TailleColonneFacile);
+        
+        return ConvertGrille("grille/facile/grille"+this.aleaFacile+".txt",Constante.TailleLigneFacile,Constante.TailleColonneFacile);
+    }
+    /** Permet de récuperer la solution de la grille facile acutelle
+     * @return solution de la grille facile
+     */
+    public String[][] RecupSolutionFacile(){
+       
+        return ConvertGrille("grille/facile/solution"+this.aleaFacile+".txt",Constante.TailleLigneFacile,Constante.TailleColonneFacile);
     }
     
 }
