@@ -2,7 +2,6 @@ package gui;
 import game.*;
 import observer.*;
 import java.io.*;
-import javax.imageio.ImageIO;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -12,7 +11,9 @@ import javax.swing.border.*;
 import javax.swing.border.Border;
 import java.awt.GraphicsEnvironment;
 
-
+/**
+ * Fenetre représentant le jeu
+ */
 
 public class Fenetre extends JFrame implements EcouteurModel,ActionListener {
     private Grille grille; 

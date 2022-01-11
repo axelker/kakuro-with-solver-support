@@ -5,6 +5,8 @@ public class CaseBlanche extends Case {
 
     private Integer value;
     private Set<Integer> domaine; 
+    private Integer valueLigne;
+    private Integer valueColonne;
 
     public CaseBlanche(int x,int y){
         super(x,y);
@@ -28,6 +30,10 @@ public class CaseBlanche extends Case {
             d.add(i);
         }
         return d;
+    }
+
+    public void modifDomaine(Set<Integer>domaine){
+        this.domaine=domaine;
     }
    
       //Redefinition du equals par rapport au valeur de la case et ces coordonnées

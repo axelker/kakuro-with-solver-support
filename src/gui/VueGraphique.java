@@ -11,11 +11,25 @@ import javax.swing.event.*;
 
 public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
 {
-
+    /**
+     * Grille du kakuro
+     */
     private Grille grille;
+    /**
+     * VueGRaphique
+     */
     private JPanel cp = new JPanel();
+    /**
+     * Vue bouton aide utilisateur
+     */
     private VueAideUtilisateur cpAide;
+    /**
+     * Ensemble des domaines
+     */
     private final ArrayList<String> domaine = Constante.domaineToString;
+    /**
+     * Associe le bouton de coordonnée i,j de la grille graphique à la case blanche de coordonnée i,j
+     */
     private Map<JButton,CaseBlanche>MapCaseBlanche = new HashMap<JButton,CaseBlanche>();
 
     public VueGraphique(Grille g)
@@ -29,7 +43,9 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
         this.add(cpAide);
         Dessin();
     }
-
+    /**
+     * Permet de déssiner graphiquement la grille du kakuro
+     */
     public void Dessin(){
         cp.removeAll();
 
@@ -53,6 +69,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
                     b.setBackground(Color.white);
                     b.setBorder(BorderFactory.createLineBorder(Color.black, 1));
                     b.addActionListener(this);
+                    //Bouton coordonnée i,j associé à la case blanche en coordonnée i,j
                     MapCaseBlanche.put(b,grille.getCaseGrille(i, j));
                     cp.add(b);
                     

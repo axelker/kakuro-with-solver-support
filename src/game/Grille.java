@@ -1,6 +1,10 @@
 package game;
 import java.util.*;
 import observer.*;
+import solver.ArcConsistency;
+import solver.Constraint;
+import solver.PetitConstraint;
+import solver.SommeConstraint;
 import src.Constante;
 
 public class Grille extends AbstractModelEcoutable {
@@ -22,6 +26,9 @@ public class Grille extends AbstractModelEcoutable {
     private int nbLigne;
     private int nbColonne;
 
+    //Contraintes
+    Set<Constraint> constraints = new HashSet<Constraint>();
+
     public Grille(){
         //Recupe une grille facile sous forme de string et sa solution
         this.grilleToString= recup.RecupGrilleFacile();
@@ -33,6 +40,7 @@ public class Grille extends AbstractModelEcoutable {
 
         //Construit les différentes map de cases 
         ConstruitGrilleCase();
+        createConstraint();
         //Met a jour le tableau de String
         MiseAjourGrille();
         //Construit la solution
@@ -123,8 +131,91 @@ public class Grille extends AbstractModelEcoutable {
             grilleToString[o.getx()][o.gety()]=o.toString();
             
         }
+        // createConstraint();
 
 
+    }
+
+    // Création des contraintes
+    public void createConstraint(){
+
+        
+
+        //Somme et plus petit sur les lignes
+        for(CaseOperation o : listeCaseOperation){
+
+            int i=o.getx();
+            
+            // LIGNE
+            if(i<this.nbLigne && o.getValueLigne()!=0){
+                int valueLigne= o.getValueLigne();
+                Set<CaseBlanche> caseBlancheContrainteLigne = new HashSet<CaseBlanche>();
+                i++;
+                Coordonne c = new Coordonne(i,o.gety());              
+                
+                //Tant que i<ligne et que la coordonne c est bien une case blanche
+                while(i<this.nbLigne && MapCaseBlanche.containsKey(c)){
+                    CaseBlanche CaseB = MapCaseBlanche.get(c);
+                    i++;
+                    c = new Coordonne(i,o.gety());
+                    caseBlancheContrainteLigne.add(CaseB);
+                    //Ajout contrainte plus petite
+                    constraints.add(new PetitConstraint(CaseB, valueLigne));
+                    
+                }
+                //Si des cases blanches ont été ajoutées
+                if(!caseBlancheContrainteLigne.isEmpty()){
+                    //Ajout contrainte de la somme des cases blanche par rapport à la valeur
+                    constraints.add(new SommeConstraint(caseBlancheContrainteLigne, valueLigne));
+                }
+            }
+
+            //COLONNE
+            int j=o.gety();
+        
+            if(j<this.nbColonne && o.getValueColonne()!=0){
+                int valueColonne= o.getValueColonne();
+                Set<CaseBlanche> caseBlancheColonne = new HashSet<CaseBlanche>();
+                j++;
+                Coordonne c = new Coordonne(o.getx(),j);              
+                
+                //Tant que i<ligne et que la coordonne c est bien une case blanche
+                while(j<this.nbColonne && MapCaseBlanche.containsKey(c)){
+                    CaseBlanche CaseB = MapCaseBlanche.get(c);
+                    j++;
+                    c = new Coordonne(o.getx(),j);
+                    caseBlancheColonne.add(CaseB);
+                    //Ajout contrainte plus petite
+                    constraints.add(new PetitConstraint(CaseB, valueColonne));
+                    
+                }
+                //Si des cases blanches ont été ajoutées
+                if(!caseBlancheColonne.isEmpty()){
+                    //Ajout contrainte de la somme des cases blanche par rapport à la valeur
+                    constraints.add(new SommeConstraint(caseBlancheColonne, valueColonne));
+                }
+            }
+
+            Map<CaseBlanche,Set<Integer>> map = new HashMap<CaseBlanche,Set<Integer>>();
+            for(CaseBlanche b : MapCaseBlanche.values()){
+                map.put(b,CaseBlanche.setDomaine());
+            }
+
+            ArcConsistency arc = new ArcConsistency(this.constraints);
+            arc.ac1(map);
+
+            for(CaseBlanche b : map.keySet()){
+                MapCaseBlanche.put(new Coordonne(b.getx(),b.gety()),b);
+            }
+
+
+            
+            
+        }
+
+       
+
+        //Contrainte de différence
     }
 
     //Construire la map des lignes des cases blanches avec comme clé la Caseopération Map<CaseOperation,List<CaseBlanche>>ligneMap;

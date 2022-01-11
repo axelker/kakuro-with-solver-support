@@ -59,18 +59,21 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         boutonDomaine.setLayout(new GridLayout(3,3));
         
         //SINON CRÉER LES VALEURS DE DOMAINE SOUS FORME DE BOUTON CLIQUABLE
-        for(int val : domaine){
-            JButton b = new JButton(val+"");
-            b.setBackground(Color.lightGray);
-            b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-            b.addActionListener(this);
-            boutonDomaine.add(b);
-            
+       
+        for(int val : this.caseModif.getDomaine()){
+                JButton b = new JButton(val+"");
+                b.setBackground(Color.lightGray);
+                b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+                b.addActionListener(this);
+                boutonDomaine.add(b);
+                
         }
         this.add(boutonDomaine);
 
     }
-
+    /**
+     * Affichage partie terminée
+     *  */
     public void Partietermine(){
         if(grille.finish()){
             this.removeAll();
@@ -79,12 +82,16 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
 
         }
     }
-    //Modifie la case blanche étant cliqué
+    /**
+     * Met à jour la valeur de la case blanche en attribut de classe
+     */
     public void setCaseModif(CaseBlanche b){
         this.caseModif=b;
         
     }
-    //Met à jour les pannels
+    /**
+     * Met à jour les pannels
+     * */
     @Override
     public void modeleMisAjour(Object source)
     {
@@ -104,8 +111,9 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
             //Prends la valeur texte du bouton pour tester si plusieurs bouton le quelle a été selectionné
             JButton Bsrc= (JButton) e.getSource(); 
             String BoutonPresse= Bsrc.getText();  
-            //Recuperer la valeur du bouton étant une valeur de domaine
-            int valDomaine=Integer.parseInt(BoutonPresse);   
+            //Recuperer la valeur du bouton étant une valeur de domaine (chiffre)
+            int valDomaine=Integer.parseInt(BoutonPresse); 
+              
             //SI La case à modifier a été initialiser et la partie n'est pas finis on change la valeur de la case par celle cliqué
             if(!caseModif.equals(null) && !grille.finish()){
                 //Appliquer la modification de la valeur de cette case
