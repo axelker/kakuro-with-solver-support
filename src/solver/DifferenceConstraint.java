@@ -5,8 +5,12 @@ import java.io.*;
 import game.*;
 
 /**
- * Contrainte portant sur la différence
+ * Contrainte UNAIRE portant sur la différence
  */
+// NE PAS METTREE EN CONTRAINTE BINAIRE 
+// V1 sert à spécifiée la valeur à ne pas avoir dans le domaine de V2
+// La valeur n'est pas entrée directement dans le constructeur car le equals est redefinis selon les deux Cases.
+    
 public class DifferenceConstraint implements Constraint{
 
     private CaseBlanche v1;
@@ -30,11 +34,11 @@ public class DifferenceConstraint implements Constraint{
     }
      
     @Override
-    //Retourne les CaseBlanche affectées par la contrainte
+    //Retourne la case blanche affectée par la contrainte
     public Set<CaseBlanche>getScope()
     {
         Set<CaseBlanche> setCaseBlanche = new HashSet<>(); 
-        setCaseBlanche.add(v1);
+        // setCaseBlanche.add(v1);
         setCaseBlanche.add(v2);
         return setCaseBlanche;
     }
@@ -44,7 +48,7 @@ public class DifferenceConstraint implements Constraint{
     public boolean isSatisfiedBy(Map<CaseBlanche,Integer>verifMap)
     {
         //Test si les variables sont contenu dans la map
-        if(verifMap.containsKey(v1) && verifMap.containsKey(v2))
+        if(verifMap.containsKey(v2))
         {
             // Retourner si la valeur corresponds à la différence des deux
             return (this.v1.getValue()!=verifMap.get(v2));
@@ -52,7 +56,7 @@ public class DifferenceConstraint implements Constraint{
            
             
         }
-       throw new IllegalArgumentException("Les cases blanches ne sont pas inclus dans la map");
+       throw new IllegalArgumentException("La case blanche n'est pas inclus dans la map");
     }
      //Redefinition du equals par rapport au valeur de la case et ces coordonnées
      @Override

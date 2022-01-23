@@ -72,18 +72,13 @@ public class Grille extends AbstractModelEcoutable {
     public void setCaseGrille(CaseBlanche c,int i,int j){
         this.MapCaseBlanche.put(new Coordonne(i,j),c);
        
+        //Applique contrainte de différence sur la case blanche et les cases blanche voisines de celle ci
         for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(new Coordonne(i,j)))){
             this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
             
             
         }
-        for(Integer dom : MapCaseBlanche.get(new Coordonne(i,j)).getDomaine()){
-            System.out.println("Domaine ( " + i+","+j+" )"+ dom);
-        }
-        for(Constraint cons : this.constraints){
-            System.out.println(cons);
-        }
-       
+              
         MiseAjourGrille();
         fireChangement(); 
     }
@@ -258,14 +253,12 @@ public class Grille extends AbstractModelEcoutable {
          }
          //Appliquer le solver sur la map et les contraintes spécifiées
          ArcConsistency arc = new ArcConsistency(this.constraints);
-         System.out.println(arc.ac1(map));
+        arc.ac1(map);
 
          //Mettre à jour la mapCasBlanche stockant les cases blanches 
          for(CaseBlanche b : map.keySet()){
              MapCaseBlanche.put(b.getCoordonne(),b);
-             for(Integer dom : b.getDomaine()){
-                System.out.println(b.toString() + " "+dom);
-             }
+            
             
          }
          

@@ -74,6 +74,7 @@ public class ArcConsistency {
          Set<Integer>domaineRemove = new HashSet<>();
 
         //Parcour du domaine de v1
+        
         for(Integer d1 : domaine1)
         {
             //Ajout de de la CaseBlanche v1 et sa valeur
@@ -159,7 +160,54 @@ public class ArcConsistency {
         
     }
 
+    // public boolean ac3(Map<CaseBlanche,Set<Integer>>map)
+    // {
+    //     if(!enforceNodeConsistency(map))
+    //     {
+    //         return false;
+    //     }
+    //     //Iterator qui nous permettras de sortir les scop des contraintes
+    //     Iterator iterConstrainte = this.contraint.iterator();
+    //     //Recuperer un scope de variable ayant une contrainte et l'ajouter au couple de case blanche
+    //     LinkedList<Set<CaseBlanche>>coupleCaseBlanche = getVoisinConstraint(iterConstrainte.next().getScope());
+        
 
+      
+    //    while(!coupleCaseBlanche.isEmpty()){
+    //     Set<CaseBlanche> voisin = coupleCaseBlanche.pullFirst();
+    //     Iterator itervoisin = voisin.iterator();
+    //     CaseBlanche v1 = itervoisin.next();
+    //     CaseBlanche v2 = itervoisin.next();
+    //         if(revise(v1,map.get(v1),v2,map.get(v2)))
+    //         {
+    //             if()
+    //             coupleCaseBlanche.push(iterConstrainte.next());
+    //         }
+        
+    //    }
+       
+
+    //     for(CaseBlanche x : map.keySet())
+    //     {
+    //         if(map.get(x).isEmpty())
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+
+        
+    // }
+
+    // public LinkedList<Set<CaseBlanche>> getVoisinConstraint(Set<CaseBlanche>set){
+    //     LinkedList<Set<CaseBlanche>> retourvoisin = new LinkedList<Set<CaseBlanche>>();
+    //     for(Constraint c : this.contraint){
+    //         if(c.getScope().containsAll(set)){
+    //             retourvoisin.push(c.getScope());
+    //         }
+    //     }
+    //     return retourvoisin;
+    // }
 
 
 
