@@ -49,4 +49,9 @@ public class Coordonne {
         String hash = ""+x+" "+y;
         return hash.hashCode();
     }
+
+    @Override
+    public String toString(){
+        return "("+x+","+y+" )";
+    }
 }

@@ -5,13 +5,19 @@ public class CaseBlanche extends Case {
 
     private Integer value;
     private Set<Integer> domaine; 
-    private Integer valueLigne;
-    private Integer valueColonne;
+    private Set<Integer> domaineBase;
+    private int caseopLigne;
+    private int caseopColonne;
+   
 
     public CaseBlanche(int x,int y){
         super(x,y);
         this.value=0;
         this.domaine=setDomaine();
+        this.domaineBase=new HashSet<>();
+        this.caseopLigne=Integer.MAX_VALUE;
+        this.caseopColonne=Integer.MAX_VALUE;
+       
         
     }
 
@@ -24,16 +30,44 @@ public class CaseBlanche extends Case {
     public Set<Integer>getDomaine(){
         return this.domaine;
     }
+    public Set<Integer>getDomaineBase(){
+        return this.domaineBase;
+    }
     public static Set<Integer> setDomaine(){
         Set<Integer>d = new HashSet<Integer>();
-        for(int i=1;i<10;i++){
+        for(int i=0;i<10;i++){
             d.add(i);
         }
         return d;
     }
-
-    public void modifDomaine(Set<Integer>domaine){
-        this.domaine=domaine;
+    public int getMinValueOp(){
+       if(caseopColonne<caseopLigne){
+           return caseopColonne;
+       }
+       
+        return caseopLigne;
+       
+    }
+    
+    public void setCaseOpLigne(int op){
+        this.caseopLigne=op;
+        
+    }
+    public void setCaseOpColonne(int op){
+        this.caseopColonne=op;
+       
+    }
+    
+    public void modifDomaine(Set<Integer>d){
+        if(this.domaineBase.isEmpty())
+        {
+            this.domaineBase=d;
+        }
+        this.domaine=d;
+        
+    }
+    public void domainetoBase(){
+        this.domaine=this.domaineBase;
     }
    
       //Redefinition du equals par rapport au valeur de la case et ces coordonnées

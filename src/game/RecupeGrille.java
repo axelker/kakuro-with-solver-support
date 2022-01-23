@@ -30,7 +30,7 @@ public class RecupeGrille {
             //Recuperer les caractères contenu dans le fichier 
             Scanner scan = new Scanner(new File(cheminFichier));
             int indice=0;
-            //Parcour du fichier par caractère
+            //Parcour du fichier par caractère et ajout à la liste
             while (scan.hasNext()) {
                     listeLigne.add(scan.next());
                     indice++;

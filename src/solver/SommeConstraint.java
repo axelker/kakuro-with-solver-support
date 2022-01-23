@@ -13,7 +13,9 @@ public class SommeConstraint implements Constraint {
         this.scopeCaseBlanche=new HashSet<>(scope);
         this.valeur=valeur;
     }
-
+    public int getValeur(){
+        return this.valeur;
+    }
     @Override
     //Retourne les CaseBlanche affectées par la contrainte
     public Set<CaseBlanche>getScope()
@@ -39,6 +41,26 @@ public class SommeConstraint implements Constraint {
 
         return somme==this.valeur;
          
+    }
+
+    @Override
+    public boolean equals(Object c) 
+    {
+        if(this==c)
+        {
+            return true;
+        }
+
+        else if(c instanceof SommeConstraint)
+            {
+              SommeConstraint tmp = (SommeConstraint)c;
+                if(tmp.getScope().containsAll(this.getScope()) && tmp.getValeur()==this.valeur)
+                {
+                    return true;
+                }
+            }
+        
+        return false;
     }
 }
 

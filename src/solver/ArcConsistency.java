@@ -73,7 +73,7 @@ public class ArcConsistency {
          Map<CaseBlanche,Integer> m = new HashMap<>();
          Set<Integer>domaineRemove = new HashSet<>();
 
-        //Parcour du domaine de v
+        //Parcour du domaine de v1
         for(Integer d1 : domaine1)
         {
             //Ajout de de la CaseBlanche v1 et sa valeur

@@ -3,6 +3,7 @@ import java.util.*;
 import observer.*;
 import solver.ArcConsistency;
 import solver.Constraint;
+import solver.DifferenceConstraint;
 import solver.PetitConstraint;
 import solver.SommeConstraint;
 import src.Constante;
@@ -11,9 +12,10 @@ public class Grille extends AbstractModelEcoutable {
     //Recupérateur de grille
     RecupeGrille recup = new RecupeGrille();
 
-    //Permet de stocker la grille sous forme de string et la solution 
+    //Permet de stocker la grille et la solution  sous forme de string 
     private String[][] grilleToString;
     private String[][] solutionToString;
+
     //Stock les cases
     private Map<Coordonne,CaseBlanche>MapCaseBlanche = new HashMap<Coordonne,CaseBlanche>();
     private List<CaseNoire>listeCaseNoire = new ArrayList<CaseNoire>();
@@ -29,6 +31,9 @@ public class Grille extends AbstractModelEcoutable {
     //Contraintes
     Set<Constraint> constraints = new HashSet<Constraint>();
 
+    //Set voisins
+    Set<Set<CaseBlanche>> voisins = new HashSet<Set<CaseBlanche>>();
+
     public Grille(){
         //Recupe une grille facile sous forme de string et sa solution
         this.grilleToString= recup.RecupGrilleFacile();
@@ -40,7 +45,7 @@ public class Grille extends AbstractModelEcoutable {
 
         //Construit les différentes map de cases 
         ConstruitGrilleCase();
-        createConstraint();
+        createVoisins();
         //Met a jour le tableau de String
         MiseAjourGrille();
         //Construit la solution
@@ -66,8 +71,21 @@ public class Grille extends AbstractModelEcoutable {
     //Modifie la valeur de la caseblanche en parametre  à la coordonnée i,j 
     public void setCaseGrille(CaseBlanche c,int i,int j){
         this.MapCaseBlanche.put(new Coordonne(i,j),c);
+       
+        for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(new Coordonne(i,j)))){
+            this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
+            
+            
+        }
+        for(Integer dom : MapCaseBlanche.get(new Coordonne(i,j)).getDomaine()){
+            System.out.println("Domaine ( " + i+","+j+" )"+ dom);
+        }
+        for(Constraint cons : this.constraints){
+            System.out.println(cons);
+        }
+       
         MiseAjourGrille();
-        fireChangement();
+        fireChangement(); 
     }
 
     //Construit les listes des cases ainsi que la map de cases blanche 
@@ -131,98 +149,127 @@ public class Grille extends AbstractModelEcoutable {
             grilleToString[o.getx()][o.gety()]=o.toString();
             
         }
-        // createConstraint();
+        applysolver();
 
 
     }
 
-    // Création des contraintes
-    public void createConstraint(){
+    public Set<CaseBlanche>adjLigne(CaseBlanche b){
+        Set<CaseBlanche>ligne=new HashSet<CaseBlanche>();
+        int i = b.getx();
+        int tmpIncr=i+1;
+        int tmpDec=i-1;
 
-        
+        while(MapCaseBlanche.get(new Coordonne(tmpIncr,b.gety()))!=null){
+            ligne.add(MapCaseBlanche.get(new Coordonne(tmpIncr,b.gety())));
+            tmpIncr++;
+        }
+        while(MapCaseBlanche.get(new Coordonne(tmpDec,b.gety()))!=null){
+            ligne.add(MapCaseBlanche.get(new Coordonne(tmpDec,b.gety())));
+            tmpDec--;
+        }
+        return ligne;
+    }
+    public Set<CaseBlanche>adjColonne(CaseBlanche b){
+        Set<CaseBlanche>colonne=new HashSet<CaseBlanche>();
+        int j = b.gety();
+        int tmpIncr=j+1;
+        int tmpDec=j-1;
 
-        //Somme et plus petit sur les lignes
+        while(MapCaseBlanche.get(new Coordonne(b.getx(),tmpIncr))!=null){
+            colonne.add(MapCaseBlanche.get(new Coordonne(b.getx(),tmpIncr)));
+            tmpIncr++;
+        }
+        while(MapCaseBlanche.get(new Coordonne(b.getx(),tmpDec))!=null){
+            colonne.add(MapCaseBlanche.get(new Coordonne(b.getx(),tmpDec)));
+            tmpDec--;
+        }
+        return colonne;
+    }
+
+    public Set<CaseBlanche> adjacent(CaseBlanche b){
+
+        Set<CaseBlanche>adj = new HashSet<CaseBlanche>();
+        if(!adjLigne(b).isEmpty())
+            adj.addAll(adjLigne(b));
+
+        if(!adjColonne(b).isEmpty())
+            adj.addAll(adjColonne(b));
+        return adj;
+    }
+
+    public void adjacentOperation(){
         for(CaseOperation o : listeCaseOperation){
-
-            int i=o.getx();
-            
-            // LIGNE
-            if(i<this.nbLigne && o.getValueLigne()!=0){
-                int valueLigne= o.getValueLigne();
-                Set<CaseBlanche> caseBlancheContrainteLigne = new HashSet<CaseBlanche>();
+            int i=o.getx()+1;
+            while(MapCaseBlanche.get(new Coordonne(i,o.gety()))!=null && o.getValueLigne()!=0){
+                MapCaseBlanche.get(new Coordonne(i,o.gety())).setCaseOpLigne(o.getValueLigne());
                 i++;
-                Coordonne c = new Coordonne(i,o.gety());              
-                
-                //Tant que i<ligne et que la coordonne c est bien une case blanche
-                while(i<this.nbLigne && MapCaseBlanche.containsKey(c)){
-                    CaseBlanche CaseB = MapCaseBlanche.get(c);
-                    i++;
-                    c = new Coordonne(i,o.gety());
-                    caseBlancheContrainteLigne.add(CaseB);
-                    //Ajout contrainte plus petite
-                    constraints.add(new PetitConstraint(CaseB, valueLigne));
-                    
-                }
-                //Si des cases blanches ont été ajoutées
-                if(!caseBlancheContrainteLigne.isEmpty()){
-                    //Ajout contrainte de la somme des cases blanche par rapport à la valeur
-                    constraints.add(new SommeConstraint(caseBlancheContrainteLigne, valueLigne));
-                }
             }
 
-            //COLONNE
-            int j=o.gety();
-        
-            if(j<this.nbColonne && o.getValueColonne()!=0){
-                int valueColonne= o.getValueColonne();
-                Set<CaseBlanche> caseBlancheColonne = new HashSet<CaseBlanche>();
+            int j=o.gety()+1;
+            while(MapCaseBlanche.get(new Coordonne(o.getx(),j))!=null && o.getValueColonne()!=0){
+                MapCaseBlanche.get(new Coordonne(o.getx(),j)).setCaseOpColonne(o.getValueColonne());
                 j++;
-                Coordonne c = new Coordonne(o.getx(),j);              
-                
-                //Tant que i<ligne et que la coordonne c est bien une case blanche
-                while(j<this.nbColonne && MapCaseBlanche.containsKey(c)){
-                    CaseBlanche CaseB = MapCaseBlanche.get(c);
-                    j++;
-                    c = new Coordonne(o.getx(),j);
-                    caseBlancheColonne.add(CaseB);
-                    //Ajout contrainte plus petite
-                    constraints.add(new PetitConstraint(CaseB, valueColonne));
-                    
-                }
-                //Si des cases blanches ont été ajoutées
-                if(!caseBlancheColonne.isEmpty()){
-                    //Ajout contrainte de la somme des cases blanche par rapport à la valeur
-                    constraints.add(new SommeConstraint(caseBlancheColonne, valueColonne));
-                }
             }
 
-            Map<CaseBlanche,Set<Integer>> map = new HashMap<CaseBlanche,Set<Integer>>();
-            for(CaseBlanche b : MapCaseBlanche.values()){
-                map.put(b,CaseBlanche.setDomaine());
-            }
+        }
+    }
 
-            ArcConsistency arc = new ArcConsistency(this.constraints);
-            arc.ac1(map);
+    // Création des voisins ligne/colonne entre chaque case blanche
+    public void createVoisins(){
 
-            for(CaseBlanche b : map.keySet()){
-                MapCaseBlanche.put(new Coordonne(b.getx(),b.gety()),b);
-            }
+        adjacentOperation();
+        createConstraint();
+        applysolver();
+        this.constraints=new HashSet<Constraint>();
+    }
 
 
-            
-            
+    public void createConstraint(){
+        for(CaseBlanche caseB : MapCaseBlanche.values()){
+            //////////////////Contrainte plus petit que la valeur de l'op ////////////////////
+            this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));   //Constrainte plus petit sur la valeur de l'op correspondante
+           
         }
 
-       
 
-        //Contrainte de différence
     }
+    public void applysolver(){
+         //Case blanche associé à leur domaine
+         Map<CaseBlanche,Set<Integer>> map = new HashMap<CaseBlanche,Set<Integer>>();
+         Set<Integer>tmpDomaine = new HashSet<Integer>();
 
-    //Construire la map des lignes des cases blanches avec comme clé la Caseopération Map<CaseOperation,List<CaseBlanche>>ligneMap;
+         //Initialisation des domaines des cases blanches dans la nouvelle map
+         for(CaseBlanche b : MapCaseBlanche.values()){
+             if(!b.getDomaineBase().isEmpty()){
+                tmpDomaine.addAll(b.getDomaineBase());
+                map.put(b,tmpDomaine);
+                tmpDomaine = new HashSet<Integer>();
+                
+             }
+             else {
+                 
+                tmpDomaine.addAll(b.getDomaine());
+                map.put(b,tmpDomaine);
+                tmpDomaine = new HashSet<Integer>();
 
-    //Construire la map des colonnes des cases blanches avec comme clé la Caseopération Map<CaseOperation,List<CaseBlanche>>colonneMap;
+             }
+             
+         }
+         //Appliquer le solver sur la map et les contraintes spécifiées
+         ArcConsistency arc = new ArcConsistency(this.constraints);
+         System.out.println(arc.ac1(map));
 
-    //Reduire les valeur des domaines de case blanche en parcourant les deux maps ( si val domaine plus grands que val opération alors supprimer val domaine)
+         //Mettre à jour la mapCasBlanche stockant les cases blanches 
+         for(CaseBlanche b : map.keySet()){
+             MapCaseBlanche.put(b.getCoordonne(),b);
+             for(Integer dom : b.getDomaine()){
+                System.out.println(b.toString() + " "+dom);
+             }
+            
+         }
+         
+    }
 
 
     public boolean finish(){

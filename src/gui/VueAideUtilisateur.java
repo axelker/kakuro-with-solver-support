@@ -61,11 +61,13 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         //SINON CRÉER LES VALEURS DE DOMAINE SOUS FORME DE BOUTON CLIQUABLE
        
         for(int val : this.caseModif.getDomaine()){
-                JButton b = new JButton(val+"");
-                b.setBackground(Color.lightGray);
-                b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-                b.addActionListener(this);
-                boutonDomaine.add(b);
+                if(val!=0){
+                    JButton b = new JButton(val+"");
+                    b.setBackground(Color.lightGray);
+                    b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+                    b.addActionListener(this);
+                    boutonDomaine.add(b);
+                }
                 
         }
         this.add(boutonDomaine);

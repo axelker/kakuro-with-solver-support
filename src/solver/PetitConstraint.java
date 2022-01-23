@@ -51,4 +51,24 @@ public class PetitConstraint implements Constraint{
        throw new IllegalArgumentException("La case blanches n'est pas inclus dans la map");
     
     }
+
+    @Override
+    public boolean equals(Object c) 
+    {
+        if(this==c)
+        {
+            return true;
+        }
+
+        else if(c instanceof PetitConstraint)
+            {
+              PetitConstraint tmp = (PetitConstraint)c;
+                if(tmp.getV1().getCoordonne().equals(this.v1.getCoordonne()) && this.valeur==tmp.getValeur())
+                {
+                    return true;
+                }
+            }
+        
+        return false;
+    }
 }
