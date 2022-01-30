@@ -160,6 +160,45 @@ public class ArcConsistency {
         
     }
 
+    // public boolean reviseBis(Map<CaseBlanche,Set<Integer>>map){
+    //     boolean del = false;
+    //     // Nouvelle map pour effectuer le test de satisfaction 
+    //     Map<CaseBlanche,Integer> m = new HashMap<>();
+    //     Set<Integer>domaineRemove = new HashSet<>();
+
+    //     for(Constraint c : this.contraint)
+    //     {
+    //         if(c.getScope().size()>2)
+    //         {
+    //             //SI non satisfait 
+    //             if(!c.isSatisfiedBy(m))
+    //             {
+    //                 toutSatisfait=false;
+    //                 break;
+    //             }
+    //         }
+                       
+    //     }
+    //         //SI tout est satisfait alors la valeur du domaine est viable
+    //         if(toutSatisfait) {
+    //             viable=true;
+    //             break;
+    //         }
+    //        //Valeur non viable
+    //        if(!viable)
+    //        {
+    //            //Ajouter les domaines qui vont etre supprimer à la liste adequate
+    //            domaineRemove.add(d1);
+    //            del=true;
+    //        }
+    //    //Supprimer toutes les valeurs du domaine non viable
+    //    domaine1.removeAll(domaineRemove);
+    //    //MODIFI LE DOMAINE DE LA CASE
+    //    v1.modifDomaine(domaine1);
+
+    //    return del;
+    // }
+
     // public boolean ac3(Map<CaseBlanche,Set<Integer>>map)
     // {
     //     if(!enforceNodeConsistency(map))

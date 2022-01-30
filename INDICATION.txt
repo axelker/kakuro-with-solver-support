@@ -6,7 +6,8 @@ Si les droits ne sont pas attribués sur l'éxecution du fichier pour linux : ch
 
 CREER .JAR 
 Aller dans le build executer le manifeste avec : 
-jar cvmf MANIFEST.MF Kakuro.jar main/*.class game/*.class gui/*.class observer/*.class grille
+jar cvmf MANIFEST.MF Kakuro.jar main/*.class game/*.class gui/*.class observer/*.class solver/*.class src/*.class grille
+OU SIMPLEMENT MODIFIER LES DOSSIER .CLASS DANS LE .jar
 
 RAJOUTER LES PACKAGE DES CLASS SI YEN A SUPPLÉMENTAIRE
 

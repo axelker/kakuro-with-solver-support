@@ -68,5 +68,12 @@ public class RecupeGrille {
        
         return ConvertGrille("grille/facile/solution"+this.aleaFacile+".txt",Constante.TailleLigneFacile,Constante.TailleColonneFacile);
     }
+
+    public String[][] RecupeGrilleTest(){
+        return ConvertGrille("grille/facile/grilletest.txt",5,5);
+    }
+    public String[][] RecupSolutionTest(){
+        return ConvertGrille("grille/facile/grilletestsolution.txt", 5, 5);
+    }
     
 }

@@ -45,7 +45,7 @@ public class PetitConstraint implements Constraint{
         if(verifMap.containsKey(v1))
         {
             // La valeur de case blanche doit etre plus petit ou egale à la valeur de la contrainte
-            return (verifMap.get(v1)<=valeur);
+            return (verifMap.get(v1)<valeur);
             
         }
        throw new IllegalArgumentException("La case blanches n'est pas inclus dans la map");
