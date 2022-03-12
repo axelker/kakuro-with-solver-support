@@ -148,7 +148,7 @@ public class Grille extends AbstractModelEcoutable {
 
 
     }
-
+    //Ensemble de case adjacente blanche sur les lignes de la case blanche en parametre
     public Set<CaseBlanche>adjLigne(CaseBlanche b){
         Set<CaseBlanche>ligne=new HashSet<CaseBlanche>();
         int i = b.getx();
@@ -165,6 +165,7 @@ public class Grille extends AbstractModelEcoutable {
         }
         return ligne;
     }
+    //Ensemble de case adjacente blanche sur les colonnes de la case blanche en parametre
     public Set<CaseBlanche>adjColonne(CaseBlanche b){
         Set<CaseBlanche>colonne=new HashSet<CaseBlanche>();
         int j = b.gety();
@@ -181,7 +182,7 @@ public class Grille extends AbstractModelEcoutable {
         }
         return colonne;
     }
-
+    //Retourn ensemble de case blanche ajdacente d'une case blanche
     public Set<CaseBlanche> adjacent(CaseBlanche b){
 
         Set<CaseBlanche>adj = new HashSet<CaseBlanche>();

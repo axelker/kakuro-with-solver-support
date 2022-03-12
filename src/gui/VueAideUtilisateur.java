@@ -1,6 +1,8 @@
 package gui;
 import game.*;
 import observer.*;
+import src.Constante;
+
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -21,16 +23,24 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     private VueGraphique vuegraphique;
     //Titre pour aide
     private JLabel titre=new JLabel("Cliquer sur une case pour afficher les valeurs de son domaine");
+    private JLabel indication = new JLabel(new ImageIcon("image/Indication.png"));
 
-    public VueAideUtilisateur(Grille g,VueGraphique vuegraphique){
+    //Couleur background
+    private Color background = Constante.backgroundColor;
+
+    private Fenetre fenetre;
+
+    public VueAideUtilisateur(Grille g,VueGraphique vuegraphique,Fenetre fenetre){
         this.grille=g;
+        this.fenetre=fenetre;
         grille.ajoutEcouteur(this);
         this.vuegraphique=vuegraphique;
         this.domaine=CaseBlanche.setDomaine();
-        setLayout(new GridLayout(2,1));
+        this.setLayout(new GridLayout(1,1));
         titre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        this.setBackground(background);
 
-        this.add(titre);
+        this.add(indication);
     }
     
     public Set<Integer> getDomaine(){
@@ -42,6 +52,8 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
 
     //Dessine les domaines sous forme de boutons cliquable
     public void DessinBouttonValDomaine(){
+        this.setLayout(new GridLayout(2,1));
+
         if(domaine.isEmpty()){
             return;
         }
@@ -63,7 +75,7 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         for(int val : this.caseModif.getDomaine()){
                 if(val!=0){
                     JButton b = new JButton(val+"");
-                    b.setBackground(Color.lightGray);
+                    b.setBackground(Constante.MenuBarBackground);
                     b.setBorder(BorderFactory.createLineBorder(Color.black, 2));
                     b.addActionListener(this);
                     boutonDomaine.add(b);
@@ -80,7 +92,16 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         if(grille.finish()){
             this.removeAll();
             titre.setText("Partie Terminée bravo !");
+            JButton recommencer = new JButton("Recommencer");
+            recommencer.setBackground(Constante.MenuBarBackground);
+            recommencer.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                    fenetre.CreationElementFenetre();
+                    
+                }
+            });
             this.add(titre);
+            this.add(recommencer);
 
         }
     }

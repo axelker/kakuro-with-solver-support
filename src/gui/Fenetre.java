@@ -15,10 +15,10 @@ import java.awt.GraphicsEnvironment;
  * Fenetre représentant le jeu
  */
 
-public class Fenetre extends JFrame implements EcouteurModel,ActionListener {
+public class Fenetre extends JFrame implements EcouteurModel {
     private Grille grille; 
     private JPanel cp; 
-    private JButton recommencer = new JButton("Recommencer");
+
     public Fenetre(Grille grille)
     {
         super("Kakuro");  // nom de la fenetre 
@@ -31,7 +31,7 @@ public class Fenetre extends JFrame implements EcouteurModel,ActionListener {
         this.setLocationRelativeTo(null); 
 
         //Ajout des différentes vue
-        CreationElementFenetre();
+        CreatingMenu();
 
         this.setVisible(true); 
     }
@@ -41,34 +41,40 @@ public class Fenetre extends JFrame implements EcouteurModel,ActionListener {
         System.out.println(grille.toString());
 
     }
-
+    //Creation jeu avec grille
     public void CreationElementFenetre(){
         cp=(JPanel) this.getContentPane();  
         cp.setLayout(new BorderLayout()); 
+        cp.removeAll();
         //VUE GRAPHIQUE ET AJOUT VUE À FENETRE //
-        VueGraphique vue = new VueGraphique(this.grille); 
+        this.grille.retraitEcouteur(this);
+        this.grille=new Grille();
+        this.grille.ajoutEcouteur(this);
+        cp.add(new MenuBar(this),BorderLayout.NORTH);
+        //VUE GRAPHIQUE ET AJOUT VUE À FENETRE //
+        VueGraphique vue = new VueGraphique(this.grille,this); 
         cp.add(vue,BorderLayout.CENTER);
-        recommencer.addActionListener(this);
-        cp.add(recommencer,BorderLayout.SOUTH);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-            //Prends la valeur texte du bouton pour tester si plusieurs bouton le quelle a été selectionné
-            JButton Bsrc= (JButton) e.getSource(); 
-            String BoutonPresse= Bsrc.getText();  
-            if(BoutonPresse.equalsIgnoreCase("recommencer")){
-
-                //VUE GRAPHIQUE ET AJOUT VUE À FENETRE //
-                this.grille.retraitEcouteur(this);
-                this.grille=new Grille();
-                this.grille.ajoutEcouteur(this);
-                cp.removeAll();
-                CreationElementFenetre();
-                cp.updateUI();
-            }
+        cp.updateUI();
 
     }
+    //Creation panel regle
+    public void CreationRegle(){
+        cp=(JPanel) this.getContentPane();  
+        cp.setLayout(new BorderLayout()); 
+        cp.removeAll();
+        cp.add(new Regle(this),BorderLayout.CENTER);
+        cp.updateUI();
+
+    }
+
+    public void CreatingMenu(){
+        cp=(JPanel) this.getContentPane();  
+        cp.setLayout(new BorderLayout()); 
+        cp.removeAll();
+        cp.add(new Menu(this),BorderLayout.CENTER);
+        cp.updateUI();
+
+    }
+
       
 }

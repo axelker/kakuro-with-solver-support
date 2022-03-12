@@ -31,16 +31,20 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
      * Associe le bouton de coordonnée i,j de la grille graphique à la case blanche de coordonnée i,j
      */
     private Map<JButton,CaseBlanche>MapCaseBlanche = new HashMap<JButton,CaseBlanche>();
+    //COuleur background
+    private Color background = Constante.backgroundColor;
 
-    public VueGraphique(Grille g)
+
+    public VueGraphique(Grille g,Fenetre fenetre)
     {
         this.grille=g;
         grille.ajoutEcouteur(this);
         cp.setLayout(new GridLayout(grille.getNbLigne(),grille.getNbColonne()));
-        cpAide=new VueAideUtilisateur(grille,this);
+        cpAide=new VueAideUtilisateur(grille,this,fenetre);
         setLayout(new GridLayout(1,2));
         this.add(cp);
         this.add(cpAide);
+        this.setBackground(background);
         Dessin();
     }
     /**
