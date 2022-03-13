@@ -34,7 +34,12 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     private JButton aideBorne = new JButton("Aide au borne");
     private JButton aideDifference = new JButton("Aide à la différence");
     private JButton supprimerContrainte = new JButton("Supprimer contrainte case");
+    private JButton aideGlobale = new JButton("Aide globale");
+    private JButton supAllContrainte = new JButton("Supprimer toutes les contraintes");
+    private JButton colorFacile = new JButton("Colorier les cases faciles");
+    private JButton supprimerColoration = new JButton("Supprimer coloration");
     private JPanel PannelAideContrainte = new JPanel();
+
 
     public VueAideUtilisateur(Grille g,VueGraphique vuegraphique,Fenetre fenetre){
         this.grille=g;
@@ -49,6 +54,10 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.PannelAideContrainte.add(aideBorne);
         this.PannelAideContrainte.add(aideDifference);
         this.PannelAideContrainte.add(supprimerContrainte);
+        this.PannelAideContrainte.add(aideGlobale);
+        this.PannelAideContrainte.add(supAllContrainte);
+        this.PannelAideContrainte.add(colorFacile);
+        this.PannelAideContrainte.add(supprimerColoration);
         this.miseEcouteAide();
     }
     
@@ -155,7 +164,39 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         if(this.caseModif!=null){
             this.caseModif.modifDomaine(CaseBlanche.setDomaine());
             this.grille.supprimerContrainte(caseModif);
+            this.grille.setCaseGrille(caseModif, caseModif.getx(),caseModif.gety()); 
         }
+    }
+   
+    //APlique toute les contraintes possible
+    public void AideGeneral(){
+        if(this.caseModif!=null){
+            this.grille.createConstraint();
+        }
+    }
+    //Supprime toute les contraintes
+    public void SuppAllContrainte(){
+        if(this.caseModif!=null){
+            this.grille.supprimerAllContrainte();
+        }
+    }
+     //Aide au case facile 
+     public void AideColoration(){
+        if(this.caseModif!=null){
+            //Applique toute les contraintes
+            this.grille.createConstraint();
+            //APPELR FONCTION QUI DOIT PERMETRE DE TROUVER LES TAILLES DE DOMAINES LES PLUS PETITES
+            this.vuegraphique.setFacileCase(this.grille.minDomaineCaseBlanche());
+            //Supprime toute les contraintes
+            this.grille.supprimerAllContrainte();
+        }
+    }
+    public void SupColoration(){
+        if(this.caseModif!=null){
+            this.vuegraphique.setFacileCase(new HashSet<CaseBlanche>());
+            this.grille.MiseAjourGrille();
+        }
+
     }
     //Mise sur ecoute bouton aide
     public void miseEcouteAide(){
@@ -172,6 +213,26 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.supprimerContrainte.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 SupprimerContrainte();
+            }
+        });
+        this.aideGlobale.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                AideGeneral();
+            }
+        });
+        this.supAllContrainte.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                SuppAllContrainte();
+            }
+        });
+        this.colorFacile.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                AideColoration();
+            }
+        });
+        this.supprimerColoration.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                SupColoration();
             }
         });
                 

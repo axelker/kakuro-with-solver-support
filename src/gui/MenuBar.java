@@ -28,7 +28,9 @@ public class MenuBar extends JMenuBar {
     private JMenuItem enregistre = new JMenuItem("Capturer l'écran");
     private JMenuItem quitter = new JMenuItem("Quitter");
     private JMenuItem afficheRegle = new JMenuItem("Consulter les règles");
-    private JMenuItem detailAide=new JMenuItem("Détails sur les aides");
+    private JMenuItem detailAide=new JMenuItem("Détails première aide");
+    private JMenuItem detailAide2=new JMenuItem("Détails deuxième aide");
+
     //FENETRE PRINCIPALE
     private Fenetre fenetrePrincipale;
 
@@ -46,6 +48,7 @@ public class MenuBar extends JMenuBar {
         this.regle.add(afficheRegle);
         //ajout sous menu aide
         this.aide.add(detailAide);
+        this.aide.add(detailAide2);
         //Ajout des menus
         this.add(action);
         this.add(regle);
@@ -89,6 +92,12 @@ public class MenuBar extends JMenuBar {
         this.detailAide.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 fenetrePrincipale.CreatingAide();
+                
+            }
+        });
+        this.detailAide2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                fenetrePrincipale.CreatingAide2();
                 
             }
         });

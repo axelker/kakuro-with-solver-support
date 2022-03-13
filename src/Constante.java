@@ -18,6 +18,7 @@ public class Constante {
     //Constante couleur
     public final static Color backgroundColor = Color.decode("#FAF1E5");
     public final static Color MenuBarBackground = Color.decode("#E8E7DF");
+    public final static Color caseFacile = Color.decode("#DAF7A6");
 
     private static ArrayList<String> getDomaineString(){
         ArrayList<String>d = new ArrayList<String>();

@@ -1,5 +1,8 @@
 package game;
 import java.util.*;
+
+import javax.swing.SpringLayout.Constraints;
+
 import observer.*;
 import solver.ArcConsistency;
 import solver.Constraint;
@@ -72,13 +75,7 @@ public class Grille extends AbstractModelEcoutable {
     public void setCaseGrille(CaseBlanche c,int i,int j){
         this.MapCaseBlanche.put(new Coordonne(i,j),c);
        
-        //Applique contrainte de différence sur la case blanche et les cases blanche voisines de celle ci
-        for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(new Coordonne(i,j)))){
-            // this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
-            
-            
-        }
-              
+                     
         MiseAjourGrille();
         fireChangement(); 
     }
@@ -146,6 +143,7 @@ public class Grille extends AbstractModelEcoutable {
             
         }
         applysolver();
+        fireChangement();
 
 
     }
@@ -216,18 +214,30 @@ public class Grille extends AbstractModelEcoutable {
     public void createVoisins(){
 
         adjacentOperation();
-        createConstraint();
         applysolver();
-        this.constraints=new HashSet<Constraint>();
+        //this.constraints=new HashSet<Constraint>();
     }
 
 
     public void createConstraint(){
+        Set<Coordonne>caseDifference  = new HashSet<Coordonne>();
         for(CaseBlanche caseB : MapCaseBlanche.values()){
             //////////////////Contrainte plus petit que la valeur de l'op ////////////////////
-            // this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));   //Constrainte plus petit sur la valeur de l'op correspondante
-           
+             this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));   //Constrainte plus petit sur la valeur de l'op correspondante
+            if(caseB.getValue()>0){
+                caseDifference.add(caseB.getCoordonne());
+            }
         }
+        //COMPLEXITÉ ELEVÉ
+        for(Coordonne c : caseDifference){
+         //Applique contrainte de différence sur la case blanche et les cases blanche voisines de celle ci
+            for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(c))){
+                this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(c), casevoisin));
+                
+            }
+        }
+        MiseAjourGrille();
+        fireChangement(); 
 
     }
     //Contrainte de borne par rapport à la case blanche
@@ -254,12 +264,42 @@ public class Grille extends AbstractModelEcoutable {
             if(c.getScope().contains(caseBlanche)){
                 
                 listesup.add(c);
+                System.out.println(c.toString());
             }
         }
         this.constraints.removeAll(listesup); 
         MiseAjourGrille();
         fireChangement(); 
     }
+    //Supprimer toute les contraintes 
+    public void supprimerAllContrainte(){
+        for(Coordonne c : this.MapCaseBlanche.keySet()){
+            this.MapCaseBlanche.get(c).modifDomaine(CaseBlanche.setDomaine());
+        }
+        this.constraints=new HashSet<Constraint>();
+        MiseAjourGrille();
+        fireChangement(); 
+    }
+
+    //Retourne set de case blanche ayant les plus petit domaines
+    public Set<CaseBlanche> minDomaineCaseBlanche(){
+        int min=11;
+        Set<CaseBlanche> minCaseBlanche = new HashSet<CaseBlanche>();
+        for(CaseBlanche mincase : this.MapCaseBlanche.values()){
+            if(mincase.getDomaine().size()<min){
+                min=mincase.getDomaine().size();
+            }
+            
+        }
+        for(CaseBlanche mincase : this.MapCaseBlanche.values()){
+            if(min==mincase.getDomaine().size()){
+                minCaseBlanche.add(mincase);
+            }
+            
+        }
+        return minCaseBlanche;
+    }
+
     public void applysolver(){
          //Case blanche associé à leur domaine
          Map<CaseBlanche,Set<Integer>> map = new HashMap<CaseBlanche,Set<Integer>>();

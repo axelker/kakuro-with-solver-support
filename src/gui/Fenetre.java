@@ -84,5 +84,13 @@ public class Fenetre extends JFrame implements EcouteurModel {
         cp.updateUI();
     }
 
+    public void CreatingAide2(){
+        cp=(JPanel) this.getContentPane();  
+        cp.setLayout(new BorderLayout()); 
+        cp.removeAll();
+        cp.add(new Aide2(this),BorderLayout.CENTER);
+        cp.updateUI();
+    }
+
       
 }
