@@ -112,54 +112,7 @@ public class VueGraphique extends JPanel implements EcouteurModel,ActionListener
             }
         }
     }
-    public void DessinColor(Set<CaseBlanche>caseColor){
-        cp.removeAll();
-
-        for(int i=0;i<this.grille.getNbLigne();i++){
-            for(int j=0;j<this.grille.getNbColonne();j++){
-                JLabel lab = new JLabel();
-
-                //Cas ou c'est une case opération construire un label
-                if(grille.getElement(i,j).contains("/")){
-                    lab=new JLabel(grille.getElement(i,j));
-                    lab.setForeground(Color.white);
-                    lab.setBackground(Color.black);
-                    lab.setBorder(BorderFactory.createLineBorder(Color.white, 1));        
-                    lab.setOpaque(true);
-                    cp.add(lab);
-                }
-
-                //Cas ou c'est une case  blanche contruire un bouton cliquable et ajouter celui-ci en tant que clé pour la case en question à la map 
-                if(grille.getElement(i,j).equals(" ") || this.domaine.contains(grille.getElement(i,j))){
-                    JButton b = new JButton(grille.getElement(i,j));
-                    if(caseColor.contains(this.grille.getCaseGrille(i, j))){
-                        b.setBackground(caseFacile);
-                    }
-                    else {
-                        b.setBackground(Color.white);
-                    }
-                    b.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-                    b.addActionListener(this);
-                    //Bouton coordonnée i,j associé à la case blanche en coordonnée i,j
-                    MapCaseBlanche.put(b,grille.getCaseGrille(i, j));
-                    cp.add(b);
-                    
-                }
-                //Cas ou c'est une case noire construire un label
-                if(grille.getElement(i,j).equals("!")){
-                    lab=new JLabel();
-                    lab.setForeground(Color.white);
-                    lab.setBackground(Color.black);
-                    lab.setBorder(BorderFactory.createLineBorder(Color.white, 1));        
-                    lab.setOpaque(true);
-                    cp.add(lab);
-                }
-                  
-                
-            }
-        }
-     
-    }
+ 
     public void AjoutPanel(){
         this.add(cp);
         this.add(cpAide);

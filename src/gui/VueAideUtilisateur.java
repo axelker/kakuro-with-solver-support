@@ -38,6 +38,7 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     private JButton supAllContrainte = new JButton("Supprimer toutes les contraintes");
     private JButton colorFacile = new JButton("Colorier les cases faciles");
     private JButton supprimerColoration = new JButton("Supprimer coloration");
+    private JButton supprimervaleur = new JButton("Supprimer valeur case");
     private JPanel PannelAideContrainte = new JPanel();
 
 
@@ -58,6 +59,7 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.PannelAideContrainte.add(supAllContrainte);
         this.PannelAideContrainte.add(colorFacile);
         this.PannelAideContrainte.add(supprimerColoration);
+        this.PannelAideContrainte.add(supprimervaleur);
         this.miseEcouteAide();
     }
     
@@ -191,12 +193,21 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
             this.grille.supprimerAllContrainte();
         }
     }
+    //SUpprimer coloration met a jour grille
     public void SupColoration(){
         if(this.caseModif!=null){
             this.vuegraphique.setFacileCase(new HashSet<CaseBlanche>());
             this.grille.MiseAjourGrille();
         }
 
+    }
+    //Supprime valeur saisie 
+    public void supvaleur(){
+        if(!caseModif.equals(null) && caseModif.getValue()>0 && !grille.finish()){
+            //Appliquer la modification de la valeur de cette case
+            caseModif.setValue(0);
+            grille.setCaseGrille(caseModif, caseModif.getx(),caseModif.gety());     
+        }     
     }
     //Mise sur ecoute bouton aide
     public void miseEcouteAide(){
@@ -233,6 +244,11 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.supprimerColoration.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 SupColoration();
+            }
+        });
+        this.supprimervaleur.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                supvaleur();
             }
         });
                 
