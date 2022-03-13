@@ -66,7 +66,7 @@ public class Fenetre extends JFrame implements EcouteurModel {
         cp.updateUI();
 
     }
-
+    //Creation menu
     public void CreatingMenu(){
         cp=(JPanel) this.getContentPane();  
         cp.setLayout(new BorderLayout()); 
@@ -74,6 +74,14 @@ public class Fenetre extends JFrame implements EcouteurModel {
         cp.add(new Menu(this),BorderLayout.CENTER);
         cp.updateUI();
 
+    }
+    //Creation aide sur les bouton d'aide à la résolution
+    public void CreatingAide(){
+        cp=(JPanel) this.getContentPane();  
+        cp.setLayout(new BorderLayout()); 
+        cp.removeAll();
+        cp.add(new Aide(this),BorderLayout.CENTER);
+        cp.updateUI();
     }
 
       
