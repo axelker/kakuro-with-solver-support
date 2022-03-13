@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
-
+//Barre de menu 
 public class MenuBar extends JMenuBar {
     //MENU ITEM
     private JMenu action = new JMenu("Navigation");
@@ -35,11 +35,14 @@ public class MenuBar extends JMenuBar {
 
     public MenuBar(Fenetre fenetre){
         this.fenetrePrincipale=fenetre;
+        //Ajout des sous menu d'action
         this.action.add(accueil);
         this.action.add(nouvellePartie);
         this.action.add(enregistre);
         this.action.add(quitter);
+        //ajout des sous menu regle
         this.regle.add(afficheRegle);
+        //Ajout des menus
         this.add(action);
         this.add(regle);
         this.Listener();
@@ -80,7 +83,7 @@ public class MenuBar extends JMenuBar {
         });
                 
     }
-
+    //Effectuer une capture d'écran
     public void captureEcran(){
         try {
             Robot robot = new Robot();

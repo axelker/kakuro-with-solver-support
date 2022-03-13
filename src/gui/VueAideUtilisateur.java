@@ -27,8 +27,14 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
 
     //Couleur background
     private Color background = Constante.backgroundColor;
-
+    //Fenetre principale
     private Fenetre fenetre;
+
+    //bouton d'aide 
+    private JButton aideBorne = new JButton("Aide au borne");
+    private JButton aideDifference = new JButton("Aide à la différence");
+    private JButton supprimerContrainte = new JButton("Supprimer contrainte case");
+    private JPanel PannelAideContrainte = new JPanel();
 
     public VueAideUtilisateur(Grille g,VueGraphique vuegraphique,Fenetre fenetre){
         this.grille=g;
@@ -39,8 +45,11 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.setLayout(new GridLayout(1,1));
         titre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         this.setBackground(background);
-
         this.add(indication);
+        this.PannelAideContrainte.add(aideBorne);
+        this.PannelAideContrainte.add(aideDifference);
+        this.PannelAideContrainte.add(supprimerContrainte);
+        this.miseEcouteAide();
     }
     
     public Set<Integer> getDomaine(){
@@ -60,12 +69,15 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         //Modif titre 
         if(!this.caseModif.equals(null)){
             titre.setText("Cliquer sur une valeur pour modifier la case blanche de coordonnée (" + this.caseModif.getx()+","+this.caseModif.gety()+")");
+            this.add(this.PannelAideContrainte);
+            this.PannelAideContrainte.add(titre);
         }
         else {
             titre.setText("Cliquer sur la valeur de votre choix");
+            this.PannelAideContrainte.add(titre);
 
         }
-        this.add(titre);
+        
         //Ajout des boutons au jpanel
         JPanel boutonDomaine = new JPanel();
         boutonDomaine.setLayout(new GridLayout(3,3));
@@ -125,6 +137,44 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         vuegraphique.Dessin();
         vuegraphique.AjoutPanel();
         vuegraphique.updateUI(); 
+    }
+    //APplique aide au borne
+    public void AideBorne(){
+        if(this.caseModif!=null){
+            this.grille.constraintBorne(caseModif);
+        }
+    }
+    //Applique aide au borne
+    public void AideDifference(){
+        if(this.caseModif!=null){
+            this.grille.constraintDifference(this.caseModif.getx(),this.caseModif.gety());
+        }
+    }
+    //Supprimer contrainte
+    public void SupprimerContrainte(){
+        if(this.caseModif!=null){
+            this.caseModif.modifDomaine(CaseBlanche.setDomaine());
+            this.grille.supprimerContrainte(caseModif);
+        }
+    }
+    //Mise sur ecoute bouton aide
+    public void miseEcouteAide(){
+        this.aideBorne.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                AideBorne();
+            }
+        });
+        this.aideDifference.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                AideDifference();
+            }
+        });
+        this.supprimerContrainte.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                SupprimerContrainte();
+            }
+        });
+                
     }
 
     @Override

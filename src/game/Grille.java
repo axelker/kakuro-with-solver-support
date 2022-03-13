@@ -74,7 +74,7 @@ public class Grille extends AbstractModelEcoutable {
        
         //Applique contrainte de différence sur la case blanche et les cases blanche voisines de celle ci
         for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(new Coordonne(i,j)))){
-            this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
+            // this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
             
             
         }
@@ -82,6 +82,7 @@ public class Grille extends AbstractModelEcoutable {
         MiseAjourGrille();
         fireChangement(); 
     }
+
 
     //Construit les listes des cases ainsi que la map de cases blanche 
     public void ConstruitGrilleCase(){
@@ -224,11 +225,40 @@ public class Grille extends AbstractModelEcoutable {
     public void createConstraint(){
         for(CaseBlanche caseB : MapCaseBlanche.values()){
             //////////////////Contrainte plus petit que la valeur de l'op ////////////////////
-            this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));   //Constrainte plus petit sur la valeur de l'op correspondante
+            // this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));   //Constrainte plus petit sur la valeur de l'op correspondante
            
         }
 
-
+    }
+    //Contrainte de borne par rapport à la case blanche
+    public void constraintBorne(CaseBlanche caseB){
+        this.constraints.add(new PetitConstraint(caseB, caseB.getMinValueOp()));
+        MiseAjourGrille();
+        fireChangement(); 
+    }
+    //Applique contrainte de différence
+    public void constraintDifference(int i,int j){
+         //Applique contrainte de différence sur la case blanche et les cases blanche voisines de celle ci
+         for(CaseBlanche casevoisin : adjacent(MapCaseBlanche.get(new Coordonne(i,j)))){
+            this.constraints.add(new DifferenceConstraint(MapCaseBlanche.get(new Coordonne(i,j)), casevoisin));
+              
+        }
+              
+        MiseAjourGrille();
+        fireChangement(); 
+    }
+    //Supprimer les/la contraintes portant sur la case blanche
+    public void supprimerContrainte(CaseBlanche caseBlanche){
+       List<Constraint>listesup = new ArrayList<Constraint>();
+        for(Constraint c : this.constraints){
+            if(c.getScope().contains(caseBlanche)){
+                
+                listesup.add(c);
+            }
+        }
+        this.constraints.removeAll(listesup); 
+        MiseAjourGrille();
+        fireChangement(); 
     }
     public void applysolver(){
          //Case blanche associé à leur domaine
