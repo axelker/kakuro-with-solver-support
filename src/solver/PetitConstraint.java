@@ -48,7 +48,7 @@ public class PetitConstraint implements Constraint{
             return (verifMap.get(v1)<valeur);
             
         }
-       throw new IllegalArgumentException("La case blanches n'est pas inclus dans la map");
+       throw new IllegalArgumentException("La case blanche n'est pas inclus dans la map");
     
     }
 

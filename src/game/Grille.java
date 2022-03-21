@@ -300,6 +300,18 @@ public class Grille extends AbstractModelEcoutable {
         return minCaseBlanche;
     }
 
+    public void SolutionCase(CaseBlanche caseB){
+        CaseBlanche change = this.MapSolutionCaseBlanche.get(caseB.getCoordonne());
+        CaseBlanche actualgrille = this.MapCaseBlanche.get(caseB.getCoordonne());
+        actualgrille.setValue(change.getValue());
+        this.setCaseGrille(actualgrille, actualgrille.getx(), actualgrille.gety());
+    }
+    public void SolutionGrille(){
+        this.MapCaseBlanche=this.MapSolutionCaseBlanche;
+        MiseAjourGrille();
+        fireChangement(); 
+    }
+
     public void applysolver(){
          //Case blanche associé à leur domaine
          Map<CaseBlanche,Set<Integer>> map = new HashMap<CaseBlanche,Set<Integer>>();

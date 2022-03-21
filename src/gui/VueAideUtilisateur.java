@@ -39,6 +39,8 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
     private JButton colorFacile = new JButton("Colorier les cases faciles");
     private JButton supprimerColoration = new JButton("Supprimer coloration");
     private JButton supprimervaleur = new JButton("Supprimer valeur case");
+    private JButton solutionCase = new JButton("Solution case");
+    private JButton solutionGrille = new JButton("Solution grille");
     private JPanel PannelAideContrainte = new JPanel();
 
 
@@ -60,6 +62,9 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.PannelAideContrainte.add(colorFacile);
         this.PannelAideContrainte.add(supprimerColoration);
         this.PannelAideContrainte.add(supprimervaleur);
+        this.PannelAideContrainte.add(solutionCase);
+        this.PannelAideContrainte.add(solutionGrille);
+
         this.miseEcouteAide();
     }
     
@@ -209,6 +214,14 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
             grille.setCaseGrille(caseModif, caseModif.getx(),caseModif.gety());     
         }     
     }
+    public void resoleCase(){
+        if(this.caseModif!=null){
+            this.grille.SolutionCase(caseModif);
+        }
+    }
+    public void resolveAll(){
+        this.grille.SolutionGrille();
+    }
     //Mise sur ecoute bouton aide
     public void miseEcouteAide(){
         this.aideBorne.addActionListener(new ActionListener(){
@@ -249,6 +262,16 @@ public class VueAideUtilisateur extends JPanel implements EcouteurModel,ActionLi
         this.supprimervaleur.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 supvaleur();
+            }
+        });
+        this.solutionCase.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                resoleCase();  
+            }
+        });
+        this.solutionGrille.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                resolveAll();
             }
         });
                 
