@@ -1,12 +1,19 @@
+# Overview
+Created a graphical user interface for solving Kakuro puzzles. The application not only generates puzzles but also assists users with solving them by providing hints and step-by-step guidance, making it a perfect tool for both beginners and experienced puzzlers.
+## Key Features
+- Constraint Solvers: Implements algorithms like AC-3 (Arc Consistency 3).
+- Gui: Swing
 
-INDICATION EXECUTION DEUX SOLUTIONS.
+## Project Structure
+- src/: Contains all source code, organized into packages and classes.
+- compilation.sh: A shell script to compile and run the program.
 
-Le fichier .jar se situe dans le dossier executable celui-ci peut être executé avec
-java -jar ./Kakuro.jar
+## Getting Started
 
-Si la version java que vous possédez n'est pas la même, veuillez utiliser 
-le script de compilation.sh situé à la racine.
+### Prerequisites
+- Java Development Kit (JDK) installed
+- A Unix-based terminal or compatible environment
 
-Etape script compilation linux dans le terminal : 
-chmod +x compilation.sh     =====> accorde droit d'execution du fichier.
-./compilation.sh     =====> lance le programme.
+
+### Compilation and Execution
+- Open a terminal and run compilation.sh. OR run java -jar ./Kakuro.jar
